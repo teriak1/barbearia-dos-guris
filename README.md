@@ -2,188 +2,341 @@
 
 codigos usados:
 
-Pagina de cadastro
-
-//<!DOCTYPE html>
-<html lang="pt-BR">
+(menu.html):
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Cliente - Barbearia Dos Gurizes</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Menu - Barbearia Dos Gurizes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-top: 50px;
+            color: #333;
+        }
+        button {
+            width: 200px;
+            margin: 10px;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bem-vindo à Barbearia Dos Gurizes</h1>
+    <button onclick="window.location.href='login.html'">Entrar como Cliente</button>
+    <button onclick="window.location.href='loginFuncionario.html'">Entrar como Funcionário</button>
+    <button onclick="window.location.href='cadastro.html'">Criar Conta</button>
+    <button onclick="window.location.href='ajuda.html'">Ajuda</button>
+</body>
+</html>
+
+Cadastro(cadastro.html)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Barbearia Dos Gurizes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            margin: 50px auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h2>Cadastro de Cliente</h2>
-    <form action="processa_cadastro.php" method="POST">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required><br>
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required><br>
-          <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required><br>
-         <button type="submit">Cadastrar</button>
+    <form action="CadastrarClienteServlet" method="post">
+        <input type="text" name="nome" placeholder="Nome Completo" required>
+        <input type="text" name="cpf" placeholder="CPF" required>
+        <input type="email" name="email" placeholder="Email">
+        <input type="text" name="celular" placeholder="Celular">
+        <input type="date" name="dataNascimento" required>
+        <button type="submit">Cadastrar</button>
     </form>
 </body>
 </html>
 
-Arquivo: processa_cadastro.php
-<?php
-include('conexao.php');
-$nome = $_POST['nome'];
-$email = $_POST['email'];
-$senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
-
-$query = "INSERT INTO clientes (nome, email, senha) VALUES ('$nome', '$email', '$senha')";
-$result = mysqli_query($conn, $query);
-
-if ($result) {
-    echo "Cadastro realizado com sucesso!";
-} else {
-    echo "Erro ao cadastrar. Tente novamente.";
-}
-?>
-
-Página de Listagem de agendamentos:
-
-
-Vamos criar o arquivo listar_agendamentos.php para visualizar os agendamentos:
-Arquivo: listar_agendamentos.php
-
-<DOCTYPE html>
-<html lang="pt-BR">
+Tabela de Horários(tabelaHorarios.html):
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamentos - Barbearia Dos Gurizes</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Tabela de Horários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 80%;
+            margin: 50px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h2>Agendamentos</h2>
+    <h2>Horários Disponíveis</h2>
     <table>
-        <tr>
-            <th>Cliente</th>
-            <th>Data</th>
-            <th>Horário</th>
-            <th>Barbeiro</th>
-        </tr>
-        <?php
-        include('conexao.php');
-        $query = "SELECT * FROM agendamentos";
-        $result = mysqli_query($conn, $query);
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo "<tr>";
-            echo "<td>" . $row['cliente'] . "</td>";
-            echo "<td>" . $row['data'] . "</td>";
-            echo "<td>" . $row['horario'] . "</td>";
-            echo "<td>" . $row['barbeiro'] . "</td>";
-            echo "</tr>";
-        }
-        ?>
+        <thead>
+            <tr>
+                <th>Horário</th>
+                <th>Barbeiro</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dados dinâmicos -->
+        </tbody>
     </table>
 </body>
 </html>
 
-Página de edição/atualização:
 
-
-Iremos criar os arquivos editar_cliente.php e atualiza_cliente.php para editar informações dos clientes.
-Arquivo: editar_cliente.php
-<?php
-include('conexao.php');
-$id = $_GET['id'];
-$query = "SELECT * FROM clientes WHERE id='$id'";
-$result = mysqli_query($conn, $query);
-$row = mysqli_fetch_assoc($result);
-?>
+Tabela de Preços(tabelaprecos.html):
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Cliente - Barbearia Dos Gurizes</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Tabela de Preços</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        table {
+            width: 60%;
+            margin: 50px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h2>Editar Cliente</h2>
-    <form action="atualiza_cliente.php?id=<?php echo $id; ?>" method="POST">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" value="<?php echo $row['nome']; ?>" required><br>
-        
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" value="<?php echo $row['email']; ?>" required><br>
-        
-        <button type="submit">Atualizar</button>
-    </form>
+    <h2>Tabela de Preços</h2>
+    <table>
+        <tr>
+            <th>Serviço</th>
+            <th>Preço</th>
+        </tr>
+        <tr>
+            <td>Corte de Cabelo</td>
+            <td>R$ 30,00</td>
+        </tr>
+        <tr>
+            <td>Barba</td>
+            <td>R$ 20,00</td>
+        </tr>
+        <tr>
+            <td>Corte + Barba</td>
+            <td>R$ 45,00</td>
+        </tr>
+    </table>
 </body>
 </html>
-Arquivo: atualiza_cliente.php
-<?php
-include('conexao.php');
-$id = $_GET['id'];
-$nome = $_POST['nome'];
-$email = $_POST['email'];
-$query = "UPDATE clientes SET nome='$nome', email='$email' WHERE id='$id'";
-$result = mysqli_query($conn, $query);
-if ($result) {
-    echo "Dados atualizados com sucesso!";
-} else {
-    echo "Erro ao atualizar. Tente novamente.";
-}
-?>
 
-Página de Exclusão
-Basicamente, utilizaremos o arquivo excluir_cliente.php para excluir clientes.
-Arquivo: excluir_cliente.php
-<?php
-include('conexao.php');
-$id = $_GET['id'];
-$query = "DELETE FROM clientes WHERE id='$id'";
-$result = mysqli_query($conn, $query);
-if ($result) {
-    echo "Cliente excluído com sucesso!";
-} else {
-    echo "Erro ao excluir cliente. Tente novamente.";
-}
-?>
-O estilo do site:
-E, por último, no arquivo styles.css para adicionar estilo às páginas:
-Arquivo: styles.css
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-}
-h2 {
-    color: #333;
-}
-form {
-    margin-bottom: 20px;
-}
-label {
-    display: inline-block;
-    width: 100px;
-}
-input {
-    margin-bottom: 10px;
-    padding: 5px;
-}
-button {
-    padding: 10px 15px;
-    background-color: #5cb85c;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;//
-}
-th {
-    background-color: #f2f2f2;  }
 
+CRUD
+
+
+1. Create (Criar)
+
+Cadastro de Cliente:
+
+<!-- cadastro.html -->
+<form action="CadastrarClienteServlet" method="post">
+    <input type="text" name="nome" placeholder="Nome Completo" required>
+    <input type="text" name="cpf" placeholder="CPF" required>
+    <input type="email" name="email" placeholder="Email">
+    <input type="text" name="celular" placeholder="Celular">
+    <input type="date" name="dataNascimento" required>
+    <button type="submit">Cadastrar</button>
+</form>
+
+// CadastrarClienteServlet.java
+@WebServlet("/CadastrarClienteServlet")
+public class CadastrarClienteServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String nome = request.getParameter("nome");
+        String cpf = request.getParameter("cpf");
+        String email = request.getParameter("email");
+        String celular = request.getParameter("celular");
+        String dataNascimento = request.getParameter("dataNascimento");
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String query = "INSERT INTO clientes (nome, cpf, email, celular, data_nascimento) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, nome);
+                stmt.setString(2, cpf);
+                stmt.setString(3, email);
+                stmt.setString(4, celular);
+                stmt.setString(5, dataNascimento);
+                stmt.executeUpdate();
+                response.sendRedirect("login.html");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cadastrar cliente.");
+        }
+    }
+}
+
+2. Read (Ler)
+
+Exibir Tabela de Horários:
+
+<!-- tabelaHorarios.html -->
+<table>
+    <thead>
+        <tr>
+            <th>Horário</th>
+            <th>Barbeiro</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Dados dinâmicos a partir do Servlet -->
+    </tbody>
+</table>
+
+// ExibirHorariosServlet.java
+@WebServlet("/ExibirHorariosServlet")
+public class ExibirHorariosServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Agendamento> agendamentos = new ArrayList<>();
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String query = "SELECT a.id, a.horario, a.status, c.nome as cliente, f.nome as barbeiro FROM agendamentos a " +
+                           "JOIN clientes c ON a.cliente_id = c.id " +
+                           "JOIN funcionarios f ON a.funcionario_id = f.id";
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Agendamento agendamento = new Agendamento();
+                    agendamento.setId(rs.getInt("id"));
+                    agendamento.setHorario(rs.getTimestamp("horario"));
+                    agendamento.setStatus(rs.getString("status"));
+                    agendamento.setCliente(rs.getString("cliente"));
+                    agendamento.setBarbeiro(rs.getString("barbeiro"));
+                    agendamentos.add(agendamento);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        request.setAttribute("agendamentos", agendamentos);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("tabelaHorarios.html");
+        dispatcher.forward(request, response);
+    }
+}
+
+3. Update (Atualizar)
+
+Alterar Status do Agendamento:
+
+// AlterarStatusAgendamentoServlet.java
+@WebServlet("/AlterarStatusAgendamentoServlet")
+public class AlterarStatusAgendamentoServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int agendamentoId = Integer.parseInt(request.getParameter("agendamentoId"));
+        String novoStatus = request.getParameter("status");
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String query = "UPDATE agendamentos SET status = ? WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, novoStatus);
+                stmt.setInt(2, agendamentoId);
+                stmt.executeUpdate();
+                response.sendRedirect("exibirAgendamentos.html");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao alterar status.");
+        }
+    }
+}
+
+4. Delete (Deletar)
+
+Cancelar Agendamento:
+
+// CancelarAgendamentoServlet.java
+@WebServlet("/CancelarAgendamentoServlet")
+public class CancelarAgendamentoServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int agendamentoId = Integer.parseInt(request.getParameter("agendamentoId"));
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            String query = "UPDATE agendamentos SET status = 'Cancelado' WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, agendamentoId);
+                stmt.executeUpdate();
+                response.sendRedirect("exibirAgendamentos.html");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao cancelar agendamento.");
+        }
+    }
+}
+
+.
